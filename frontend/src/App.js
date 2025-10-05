@@ -36,12 +36,13 @@ useEffect(() => {
 }, [chatHistory]);
 
 
-  useEffect(() => {
-  if (messagesEndRef.current) {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-  }
+ useEffect(() => {
+  const timer = setTimeout(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+  return () => clearTimeout(timer);
 }, [chatHistory]);
-
+  
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
