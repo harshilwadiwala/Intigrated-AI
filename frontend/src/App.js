@@ -28,12 +28,13 @@ const App = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
- useEffect(() => {
+useEffect(() => {
   const timer = setTimeout(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, 50);
+  }, 100);
   return () => clearTimeout(timer);
 }, [chatHistory]);
+
 
   useEffect(() => {
   if (messagesEndRef.current) {
