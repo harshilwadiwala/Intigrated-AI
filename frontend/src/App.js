@@ -28,17 +28,18 @@ const App = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [chatHistory]); // Keep this dependency on chatHistory
+ useEffect(() => {
+  const timer = setTimeout(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, 50);
+  return () => clearTimeout(timer);
+}, [chatHistory]);
 
   useEffect(() => {
-    if (isSidebarOpen) {
-      document.body.classList.add("sidebar-open");
-    } else {
-      document.body.classList.remove("sidebar-open");
-    }
-  }, [isSidebarOpen]);
+  if (messagesEndRef.current) {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  }
+}, [chatHistory]);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -418,7 +419,7 @@ I was conceptualized and brought to life by  Harshil Wadiwala as a dedicated pro
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} /> 
+         <div ref={messagesEndRef} style={{ float: "left", clear: "both" }} />
         </div>
 
         <div className="input-area">

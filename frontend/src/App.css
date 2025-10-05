@@ -45,19 +45,28 @@ body {
 }
 
 .App {
-    display: flex;
-    flex-direction: column;
-    height: 90vh;
-    width: 70vw; /* Slightly wider container for better aesthetics */
-    max-width: 1200px;
-    border-radius: 20px; /* Increased border-radius for modern look */
-    overflow: hidden;
-    font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  width: 70vw;
+  max-width: 1200px;
+  border-radius: 20px;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #252b38;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 
-    /* DARK THEME: Main app container background */
-    background: #252b38;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  /* Crucial: make children scrollable properly */
+  min-height: 0;
 }
+
+
+.app-title {
+    font-size: 2em;
+    display: none; 
+}
+
+/* -------------------- SIDEBAR STYLES -------------------- */
 
 .sidebar-wrapper {
     position: fixed;
@@ -114,9 +123,7 @@ body {
 
 .icon {
     font-size: 2em;
-    
     flex-shrink: 0;
-    
     /* PURPLE THEME: Icon color */
     color: #8a4cd8; 
 }
@@ -179,7 +186,6 @@ body {
 .menu_icon {
     font-size: 1.7em;
     cursor: pointer;
-    
     flex-shrink: 0;
     /* DARK THEME: Icon color */
     color: #8a4cd8;
@@ -232,121 +238,63 @@ body {
     /* DARK THEME: History item text color */
     color: rgba(224, 230, 235, 0.8);
 }
-.App {
-    display: flex; /* CRITICAL: Enables Flexbox layout */
-    flex-direction: column; /* CRITICAL: Stacks children (chat-window, input-area) vertically */
-    height: 90vh; /* Keeps the main app container at a fixed height */
-    width: 70vw; 
-    max-width: 1200px;
-    border-radius: 20px;
-    overflow: hidden; 
-    font-family: 'Inter', sans-serif;
-    background: #252b38;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    /* No changes needed here, your existing styles look correct for this purpose. */
-}
-.app-title {
-    font-size: 2em;
-    display: none; 
-}
-/* Update the styles for the main scrollable chat area */
-/* REPLACING THE PREVIOUS .chat-window FIX */
+
+/* -------------------- CHAT WINDOW & SCROLL FIX -------------------- */
+
 .chat-window {
-    flex-grow: 1; /* CRITICAL: Tells the chat window to take up all available vertical space */
-    
-    padding:0 30px; /* Provides spacing around the messages */
-    
-    overflow-y: auto; /* CRITICAL: Enables vertical scrolling when content overflows */
-    overflow-x: hidden; /* Prevents unwanted horizontal scrolling */
-    
-    scroll-behavior: smooth;
-    
-    /* Ensure no residual height/max-height settings from previous attempts */
-    height: auto; 
-    max-height: none; 
-}
-.chat-window > :first-child {
-    padding-top: 30px; /* Add top padding to the first message */
-}
-.chat-window > :last-child {
-    padding-bottom: 30px; /* Add bottom padding above the input area */
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 20px 30px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Hide the scrollbar for Webkit browsers (Chrome, Safari) */
-.chat-window::-webkit-scrollbar {
-    display: none;
-}/* REPLACING THE PREVIOUS .chat-window FIX */
-.chat-window {
-    /* Critical: This makes the chat window take up all the vertical space 
-       between the header (if present) and the input-area. */
-    flex-grow: 1; 
-    
-    /* Ensure the chat window content is padded correctly */
-    padding: 30px; 
-    
-    /* The core fix: Enables vertical scrolling */
-    overflow-y: auto; 
-    
-    /* Prevents any horizontal scrollbar */
-    overflow-x: hidden; 
-    
-    /* Ensures smooth scrolling */
-    scroll-behavior: smooth;
-    
-    /* Optional: Hide the scrollbar itself for a cleaner look */
-    scrollbar-width: none; /* Firefox */
-}
-
-/* Hide the scrollbar for Webkit browsers (Chrome, Safari) */
 
 .chat-window::-webkit-scrollbar {
     display: none;
 }
+
+/* -------------------- MESSAGE STYLES -------------------- */
 
 .message {
     margin-bottom: 20px; /* Increased margin */
     padding: 0; 
     border-radius: 18px;
-    max-width: 85%; /* Increased max-width */
+    max-width: 85%; 
     word-wrap: break-word;
     display: flex;
     flex-direction: column;
     overflow-wrap: break-word; 
-
 }
 
-/* User Bubble Styles (User is aligned to the right, must use .user-bubble-wrapper for styling) */
+/* User Bubble Styles (Positioning and width constraint) */
 .message.user {
-    background: linear-gradient(90deg, #d369ff 12%, #a55cff 56%, #8a4cd8 100%);
-   color: white;
-    max-width: 60%; /* Change from 75% or 85% to a shorter percentage */
-    
-    align-self: flex-end;
-    margin-left: auto;
-    width: auto;
-    padding: 0.5em; /* Remove this line if you are using the wrapper below */
-    border-top-right-radius: 1px;
+  align-self: flex-end;
+  max-width: 65%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
-/* --- FIX: User Bubble Wrapper for Images and Text --- */
+/* --- FIX: User Bubble Wrapper (Styles applied here, and width enforced) --- */
 .message.user .user-bubble-wrapper {
-    /* PURPLE GRADIENT (Blending from pink/purple to deep purple) */
-    background: linear-gradient(90deg, #d369ff 12%, #a55cff 56%, #8a4cd8 100%);
-    border-radius: 20px;
-    border-bottom-right-radius: 5px; /* Tail effect */
-    padding: 12px 18px;
-    color: white;
-    align-self: flex-end;
-    line-height: 1.5em;
-    max-width: 100%; 
-    width: fit-content;
-    box-sizing: border-box;
-    margin: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    /* Flex column to stack image and text if both exist */
-    display: flex;
-    flex-direction: column;
-    gap: 8px; 
+  background: linear-gradient(90deg, #d369ff 12%, #a55cff 56%, #8a4cd8 100%);
+  border-radius: 20px;
+  border-bottom-right-radius: 5px;
+  padding: 12px 18px;
+  color: white;
+  line-height: 1.5em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+  /* Correct width behavior */
+  max-width: 100%;
+  width: fit-content;
+  display: inline-block;
+  align-self: flex-end;
+  word-break: break-word;
 }
 
 /* Target P tag inside the new wrapper */
@@ -360,7 +308,6 @@ body {
     height: auto;
     max-height: 25em; 
     border-radius: 12px;
-    /* Remove background, margin, and box-shadow that were conflicting */
     background: none; 
     margin: 0;
     box-shadow: none;
@@ -393,7 +340,7 @@ body {
 .message.bot {
     padding: 0; 
     max-width: 75%;
-    width: auto;
+  
     align-self: flex-start;
     background: none; 
 }
@@ -415,7 +362,8 @@ body {
     margin: 0;
 }
 
-/* Input Area */
+/* -------------------- INPUT AREA STYLES -------------------- */
+
 .input-area {
     display: flex;
     padding: 20px 30px;
@@ -548,7 +496,6 @@ button:disabled {
     color: #8a4cd8;
 }
 
-/* User-uploaded image is now handled by .user-bubble-wrapper .uploaded-image */
 /* Bot-generated image remains as follows: */
 .uploaded-image {
     width: 100%;
@@ -574,6 +521,8 @@ button:disabled {
 .download-btn:hover {
     color: #7138b3;
 }
+
+/* -------------------- HEADER/LOGO STYLES -------------------- */
 
 /* Updated Logo/Header Positioning */
 .app-header {
@@ -601,7 +550,6 @@ body.sidebar-open .app-header {
     position: relative;
     top: -1em; 
     left: 2em;
-
     color: white;
 }
 .logo h2{
@@ -621,4 +569,13 @@ body.sidebar-open .app-header {
     to {
         transform: translateY(-8px);
     }
+}
+@media (max-width: 768px) {
+  .App {
+    width: 95vw;
+    height: 95vh;
+  }
+  .message.user, .message.bot {
+    max-width: 85%;
+  }
 }
