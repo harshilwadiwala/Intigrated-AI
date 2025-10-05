@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; 
 import "./App.css";
 import { FaGripLines } from "react-icons/fa";
 import { FaPenToSquare } from "react-icons/fa6";
@@ -22,13 +22,15 @@ const App = () => {
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
   const chatHistory = activeChat ? activeChat.history : [];
+  const messagesEndRef = useRef(null); 
+ 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
-  useEffect(() => {
-    const chatWindow = document.querySelector(".chat-window");
-    if (chatWindow) {
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-  }, [chatHistory]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatHistory]); // Keep this dependency on chatHistory
 
   useEffect(() => {
     if (isSidebarOpen) {
@@ -416,6 +418,7 @@ I was conceptualized and brought to life by  Harshil Wadiwala as a dedicated pro
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} /> 
         </div>
 
         <div className="input-area">
