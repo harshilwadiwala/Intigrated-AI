@@ -232,32 +232,66 @@ body {
     /* DARK THEME: History item text color */
     color: rgba(224, 230, 235, 0.8);
 }
-
+.App {
+    display: flex; /* CRITICAL: Enables Flexbox layout */
+    flex-direction: column; /* CRITICAL: Stacks children (chat-window, input-area) vertically */
+    height: 90vh; /* Keeps the main app container at a fixed height */
+    width: 70vw; 
+    max-width: 1200px;
+    border-radius: 20px;
+    overflow: hidden; 
+    font-family: 'Inter', sans-serif;
+    background: #252b38;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    /* No changes needed here, your existing styles look correct for this purpose. */
+}
 .app-title {
     font-size: 2em;
     display: none; 
 }
 /* Update the styles for the main scrollable chat area */
+/* REPLACING THE PREVIOUS .chat-window FIX */
 .chat-window {
-    /* 1. Crucial: Hides any unwanted horizontal scrollbar */
+    flex-grow: 1; /* CRITICAL: Tells the chat window to take up all available vertical space */
+    
+    padding: 30px; /* Provides spacing around the messages */
+    
+    overflow-y: auto; /* CRITICAL: Enables vertical scrolling when content overflows */
+    overflow-x: hidden; /* Prevents unwanted horizontal scrolling */
+    
+    scroll-behavior: smooth;
+    
+    /* Ensure no residual height/max-height settings from previous attempts */
+    height: auto; 
+    max-height: none; 
+}
+/* Hide the scrollbar for Webkit browsers (Chrome, Safari) */
+.chat-window::-webkit-scrollbar {
+    display: none;
+}/* REPLACING THE PREVIOUS .chat-window FIX */
+.chat-window {
+    /* Critical: This makes the chat window take up all the vertical space 
+       between the header (if present) and the input-area. */
+    flex-grow: 1; 
+    
+    /* Ensure the chat window content is padded correctly */
+    padding: 30px; 
+    
+    /* The core fix: Enables vertical scrolling */
+    overflow-y: auto; 
+    
+    /* Prevents any horizontal scrollbar */
     overflow-x: hidden; 
     
-    /* 2. Ensures the container takes up all available horizontal space */
-    width: 100%; 
-    
-    /* 3. Ensures text and content wrap within the container's width */
-    word-wrap: break-word; 
-    white-space: normal;
-    
-    /* 🎯 NEW: Scroll properties moved from .message-container 🎯 */
-    flex-grow: 1; /* Allows it to fill space between header and input */
-    height: calc(90vh - 120px); /* Use a max height derived from its parent .App */
-    overflow-y: auto; /* The actual scroll trigger */
+    /* Ensures smooth scrolling */
     scroll-behavior: smooth;
-    padding: 30px; /* Add padding here for better spacing */
-    box-sizing: border-box; 
-    /* (Keep your existing height/max-height and overflow-y: auto; here) */
+    
+    /* Optional: Hide the scrollbar itself for a cleaner look */
+    scrollbar-width: none; /* Firefox */
 }
+
+/* Hide the scrollbar for Webkit browsers (Chrome, Safari) */
+
 .chat-window::-webkit-scrollbar {
     display: none;
 }
@@ -385,6 +419,7 @@ body {
     /* DARK THEME: Dark footer with a slight transparency */
     background: rgba(37, 43, 56, 0.9);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    flex-shrink: 0; /* Ensures the input area never shrinks */
 }
 
 .text-input {
