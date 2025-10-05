@@ -249,6 +249,13 @@ body {
     word-wrap: break-word; 
     white-space: normal;
     
+    /* 🎯 NEW: Scroll properties moved from .message-container 🎯 */
+    flex-grow: 1; /* Allows it to fill space between header and input */
+    height: calc(90vh - 120px); /* Use a max height derived from its parent .App */
+    overflow-y: auto; /* The actual scroll trigger */
+    scroll-behavior: smooth;
+    padding: 30px; /* Add padding here for better spacing */
+    box-sizing: border-box; 
     /* (Keep your existing height/max-height and overflow-y: auto; here) */
 }
 .chat-window::-webkit-scrollbar {
@@ -571,19 +578,4 @@ body.sidebar-open .app-header {
     to {
         transform: translateY(-8px);
     }
-}
-/* Locate the CSS class for the container holding all chat messages */
-.message-container { 
-    /* This ensures the container takes up the space intended for the messages */
-    height: calc(100vh - 200px); /* Adjust this value as needed, 
-                                     100vh minus the height of the header and input box */
-
-    /* The crucial line: allows vertical scrolling */
-    overflow-y: auto; 
-
-    /* Optional: Smoother scrolling experience */
-    scroll-behavior: smooth;
-    
-    /* Optional: Hide the horizontal scrollbar if it appears */
-    overflow-x: hidden; 
 }
