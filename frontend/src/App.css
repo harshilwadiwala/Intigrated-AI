@@ -254,7 +254,7 @@ body {
 .chat-window {
     flex-grow: 1; /* CRITICAL: Tells the chat window to take up all available vertical space */
     
-    padding: 30px; /* Provides spacing around the messages */
+    padding:0 30px; /* Provides spacing around the messages */
     
     overflow-y: auto; /* CRITICAL: Enables vertical scrolling when content overflows */
     overflow-x: hidden; /* Prevents unwanted horizontal scrolling */
@@ -265,6 +265,13 @@ body {
     height: auto; 
     max-height: none; 
 }
+.chat-window > :first-child {
+    padding-top: 30px; /* Add top padding to the first message */
+}
+.chat-window > :last-child {
+    padding-bottom: 30px; /* Add bottom padding above the input area */
+}
+
 /* Hide the scrollbar for Webkit browsers (Chrome, Safari) */
 .chat-window::-webkit-scrollbar {
     display: none;
@@ -311,13 +318,13 @@ body {
 /* User Bubble Styles (User is aligned to the right, must use .user-bubble-wrapper for styling) */
 .message.user {
     background: linear-gradient(90deg, #d369ff 12%, #a55cff 56%, #8a4cd8 100%);
-   
-    color: white;
+   color: white;
+    max-width: 60%; /* Change from 75% or 85% to a shorter percentage */
+    
     align-self: flex-end;
     margin-left: auto;
     width: auto;
-    max-width: 75%;
-    padding: 0.5em;
+    padding: 0.5em; /* Remove this line if you are using the wrapper below */
     border-top-right-radius: 1px;
 }
 
@@ -331,7 +338,8 @@ body {
     color: white;
     align-self: flex-end;
     line-height: 1.5em;
-    width: auto;
+    max-width: 100%; 
+    width: fit-content;
     box-sizing: border-box;
     margin: 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
