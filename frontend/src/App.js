@@ -5,8 +5,12 @@ import { FaPenToSquare } from "react-icons/fa6";
 import { IoSettingsSharp } from "react-icons/io5";
 import { BsSendFill } from "react-icons/bs";
 import { RiCheckboxBlankFill } from "react-icons/ri";
-import roboLogo from "./assets/robo-logo.jpg";
+import { FaDownload } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 
+
+import roboLogo from "./assets/robo-logo.jpg";
+import imaginate from "./assets/imaginateLogo.png";
 const App = () => {
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
@@ -38,6 +42,38 @@ const App = () => {
     const file = event.target.files[0];
     if (file) {
       setUploadedImage(file);
+    }
+  };
+
+  const handleCopyImage = async (url) => {
+    try {
+      const response = await fetch(url, { mode: "cors" });
+      const blob = await response.blob();
+      await navigator.clipboard.write([
+        new window.ClipboardItem({ [blob.type]: blob }),
+      ]);
+      alert("Image copied to clipboard!");
+    } catch (err) {
+      alert("Failed to copy image.");
+    }
+  };
+
+  // Add this function inside your App component
+  const handleImageDownload = async (url, filename = "generated-image.jpg") => {
+    try {
+      const response = await fetch(url, { mode: "cors" });
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      alert("Failed to download image.");
     }
   };
 
@@ -127,7 +163,36 @@ const App = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    const nameInquiry = currentInput.toLowerCase().includes("what is your name") ||
+                         currentInput.toLowerCase().includes("what's your name");
 
+    if (nameInquiry) {
+    const botResponse = { 
+  text: `Hello! I am  Imaginate AI , a versatile and powerful language model. 🧠
+
+I was conceptualized and brought to life by  Harshil Wadiwala as a dedicated project to demonstrate the capabilities of modern generative AI. You can think of me as your custom assistant, trained to handle text queries, process images, and generate creative images upon request. My primary purpose is to be a helpful and reliable AI companion.` 
+};
+      
+      // Add the bot's hardcoded response to the history
+      setChats((prevChats) => {
+        const chatToUpdate = prevChats.find(
+          (chat) => chat.id === currentActiveChatId
+        ) || { history: [] };
+        const newHistoryWithBotResponse = [
+          ...chatToUpdate.history,
+          { role: "bot", ...botResponse },
+        ];
+        return prevChats.map((chat) =>
+          chat.id === currentActiveChatId
+            ? { ...chat, history: newHistoryWithBotResponse }
+            : chat
+        );
+      });
+
+      // Clear input and stop loading
+      setLoading(false);
+      return; // Crucially, exit the function
+    }
     try {
       let response, data;
       const isImageRequest =
@@ -230,54 +295,61 @@ const App = () => {
         onMouseLeave={() => setIsSidebarOpen(false)}
       >
         <div className="sidebar-trigger"></div>
-       <div className="sidebar">
-  <div className="menu-header">
-    <span className="menu_icon">
-      <FaGripLines />
-    </span>
-  </div>
-  <li className="sidebar-item" onClick={startNewChat}>
-    <div className="sidebar-item-content">
-      <div className="icon">
-        <FaPenToSquare />
-      </div>
-      <h3 className="sidebar-text">New Chat</h3>
-    </div>
-  </li>
-
-  <div className="sidebar-scrollable-content">
-    <ul>
-      {chats.map((chat) => (
-        <li
-          key={chat.id}
-          className={`sidebar-item chat-history-item ${
-            chat.id === activeChatId ? "active" : ""
-          }`}
-          onClick={() => setActiveChatId(chat.id)}
-        >
-          <div className="sidebar-item-content">
-            <h5 className="sidebar-text">{chat.name}</h5>
+        <div className="sidebar">
+          <div className="menu-header">
+            <span className="menu_icon">
+              <FaGripLines />
+            </span>
+           
           </div>
-        </li>
-      ))}
-    </ul>
-  </div>
+          <li className="sidebar-item" onClick={startNewChat}>
+            <div className="sidebar-item-content">
+              <div className="icon" style={{ position: "relative", left: "-0.3em" }}>
+                <FaPenToSquare />
+              </div>
+              <h3 className="sidebar-text">New Chat</h3>
+            </div>
+          </li>
 
-  <div className="sidebar-footer">
-    <li className="sidebar-item">
-      <div className="sidebar-item-content">
-        <div className="icon">
-          <IoSettingsSharp />
+          <div className="sidebar-scrollable-content">
+            <ul>
+              {chats.map((chat) => (
+                <li
+                  key={chat.id}
+                  className={`sidebar-item chat-history-item ${
+                    chat.id === activeChatId ? "active" : ""
+                  }`}
+                  onClick={() => setActiveChatId(chat.id)}
+                >
+                  <div className="sidebar-item-content">
+                    <h5 className="sidebar-text">{chat.name}</h5>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="sidebar-footer">
+            <li className="sidebar-item">
+              <div className="sidebar-item-content">
+                <div className="icon">
+                  <IoSettingsSharp />
+                </div>
+                <h3 className="sidebar-text">Setting</h3>
+              </div>
+            </li>
+          </div>
         </div>
-        <h3 className="sidebar-text">Setting</h3>
       </div>
-    </li>
-  </div>
-</div>
-      </div>
+          <div className="app-header">
+            <div className="logo">
 
+        <img src={imaginate} alt="Logo" className="app-logo" />
+        <h2 className="app-logo">Imaginate</h2>
+            </div>
+{/* <span className="app-title">Imaginate AI</span> */}
+</div>
       <div className="App">
-        <h1 className="app-title">My Gemini Chatbot</h1>
         <div className="chat-window">
           {chatHistory.map((msg, index) => (
             <div key={index} className={`message ${msg.role}`}>
@@ -286,11 +358,34 @@ const App = () => {
                   <img src={roboLogo} className="robo-logo" alt="Bot" />
                   <div className="bot-content">
                     {msg.type === "image" ? (
-                      <img
-                        src={msg.content}
-                        alt="Generated"
-                        className="uploaded-image"
-                      />
+                      <>
+                        <img
+                          src={msg.content}
+                          alt="Generated"
+                          className="uploaded-image"
+                        />
+                        <div className="download_copy">
+                          <button
+                            className="download-btn"
+                            style={{
+                              marginTop: "8px",
+                              color: "#7a3cff",
+                              textDecoration: "underline",
+                              fontSize: "1.4em",
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              padding: 0,
+                              position: "relative",
+                              right: "-18em",
+                            }}
+                            onClick={() => handleImageDownload(msg.content)}
+                          >
+                            <FaDownload />
+                          </button>
+                          
+                        </div>
+                      </>
                     ) : (
                       <p className="bot-response">{msg.text || msg.content}</p>
                     )}
@@ -332,7 +427,7 @@ const App = () => {
             placeholder={
               uploadedImage
                 ? `Image selected: ${uploadedImage.name}`
-                : "Type your message or add an image..."
+                : "Type your message or add an image or type generate/create image..."
             }
             disabled={isLoading}
             className="text-input"
@@ -349,7 +444,7 @@ const App = () => {
             disabled={isLoading}
             className="plus-button"
           >
-            ➕
+            <FaPlus />
           </button>
           <button
             onClick={sendMessage}

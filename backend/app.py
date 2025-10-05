@@ -45,7 +45,7 @@ def image_chat_endpoint():
     try:
         image_bytes = file.read()
         image = Image.open(io.BytesIO(image_bytes))
-        vision_model = genai.GenerativeModel('gemini-1.5-flash')
+        vision_model = genai.GenerativeModel('gemini-2.5-pro')
         contents = []
         if prompt:
             contents.append(prompt)

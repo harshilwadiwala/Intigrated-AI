@@ -26,7 +26,7 @@ app.add_middleware(
 
 # Function to get Gemini response (updated to clearly handle None for image)
 def get_gemini_response(input_text, image_data=None):
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-pro')
     contents = []
     if input_text:
         contents.append(input_text)
